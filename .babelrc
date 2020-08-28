@@ -18,7 +18,8 @@
         "@babel/plugin-transform-parameters",
         "@babel/plugin-transform-destructuring",
         "@babel/plugin-transform-block-scoping",
-        "@babel/plugin-transform-typeof-symbol"
+        "@babel/plugin-transform-typeof-symbol",
+        "@babel/plugin-proposal-object-rest-spread"
       ]
     },
     "development": {
@@ -40,7 +41,8 @@
         "@babel/plugin-transform-parameters",
         "@babel/plugin-transform-destructuring",
         "@babel/plugin-transform-block-scoping",
-        "@babel/plugin-transform-typeof-symbol"
+        "@babel/plugin-transform-typeof-symbol",
+        "@babel/plugin-proposal-object-rest-spread"
       ]
     }
   }
