@@ -86,6 +86,10 @@ export default class Cart extends Component {
     return this.model ? this.model.lineItems : [];
   }
 
+  get checkoutCurrency() {
+    return this.sanitizedCheckoutConfig && this.sanitizedCheckoutConfig.presentmentCurrencyCode;
+  }
+
   /**
    * get HTML for cart line items.
    * @return {String} HTML
@@ -93,7 +97,15 @@ export default class Cart extends Component {
   get lineItemsHtml() {
     return this.lineItemCache.reduce((acc, lineItem) => {
       const data = Object.assign({}, lineItem, this.options.viewData);
-      const fullPrice = data.variant.priceV2.amount * data.quantity;
+      let price;
+      if (this.checkoutCurrency) {
+        price = data.variant.presentmentPrices.find(
+          (priceObj) => priceObj.price.currencyCode === this.checkoutCurrency
+        ).price.amount;
+      } else {
+        price = data.variant.priceV2.amount;
+      }
+      const fullPrice = price * data.quantity;
       const formattedPrice = formatMoney(fullPrice, this.moneyFormat);
       const discountAllocations = data.discountAllocations;
 
