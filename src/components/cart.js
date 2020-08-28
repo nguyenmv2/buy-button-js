@@ -13,6 +13,7 @@ export const NO_IMG_URL = '//sdks.shopifycdn.com/buy-button/latest/no-image.jpg'
 
 const LINE_ITEM_TARGET_SELECTIONS = ['ENTITLED', 'EXPLICIT'];
 const CART_TARGET_SELECTION = 'ALL';
+const CHECKOUT_INPUT_FIELDS = ['presentmentCurrencyCode'];
 
 /**
  * Renders and cart embed.
@@ -34,6 +35,7 @@ export default class Cart extends Component {
     this.lineItemCache = [];
     this.moneyFormat = this.globalConfig.moneyFormat;
     this.checkout = new Checkout(this.config);
+    this.checkoutConfig = this.config.checkout;
     const toggles = this.globalConfig.toggles || [{
       node: this.node.parentNode.insertBefore(document.createElement('div'), this.node),
     }];
@@ -436,6 +438,7 @@ export default class Cart extends Component {
         lineItems: [
           lineItem,
         ],
+        ...this.sanitizedCheckoutConfig,
       };
       return this.props.client.checkout.create(input).then((checkout) => {
         localStorage.setItem(this.localStorageCheckoutKey, checkout.id);
@@ -447,6 +450,14 @@ export default class Cart extends Component {
         return checkout;
       });
     }
+  }
+
+  get sanitizedCheckoutConfig() {
+    return Object.keys(this.checkoutConfig).reduce((result, key) => {
+      if (!CHECKOUT_INPUT_FIELDS.includes(key)) { return result; }
+
+      return {...result, [key]: this.checkoutConfig[key]};
+    }, {});
   }
 
   /**
